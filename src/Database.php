@@ -10,8 +10,6 @@ use Generator;
 
 class Database
 {
-    use ObjectMagicGetTrait;
-
     /**
      * @var Database
      */
