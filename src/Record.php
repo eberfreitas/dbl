@@ -27,7 +27,7 @@ abstract class Record extends Collection
     /**
      * @var Database
      */
-    private $db;
+    protected $db;
 
     /**
      * @param array $data
@@ -51,8 +51,6 @@ abstract class Record extends Collection
         $relatedData = [];
 
         foreach ($data as $k => $v) {
-            $k = $k;
-
             if (strpos($k, $relatedDataSeparator) !== false) {
                 list($table, $key) = explode($relatedDataSeparator, $k);
 
@@ -97,7 +95,6 @@ abstract class Record extends Collection
         $class = '\\' . trim(__NAMESPACE__, '\\') . '\\' . $this->camelize($table);
 
         if (class_exists($class)) {
-            /** @var Collection */
             $data = new $class($data);
         } else {
             $data = new Collection($data);

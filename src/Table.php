@@ -44,7 +44,7 @@ abstract class Table
     /**
      * @var Database
      */
-    private $db;
+    protected $db;
 
     /**
      * @var array
@@ -65,8 +65,8 @@ abstract class Table
         $this->driver = $this->driverFactory($this->getDriverName());
         $this->columns = $this->driver->getColumns();
 
-        if (!empty($this->db->settings['types_map'])) {
-            $this->typesMap = array_merge($this->typesMap, $this->db->settings['types_map']);
+        if (!empty($this->db->getSettings('types_map'))) {
+            $this->typesMap = array_merge($this->typesMap, $this->db->getSettings('types_map'));
         }
     }
 

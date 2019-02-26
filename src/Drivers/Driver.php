@@ -2,6 +2,7 @@
 
 namespace Dbl\Drivers;
 
+use Dbl\Collection;
 use Dbl\Table;
 use Dbl\Database;
 
@@ -31,12 +32,12 @@ abstract class Driver
     /**
      * @param string $prefix
      *
-     * @return \Dbl\Collection
+     * @return Collection
      */
-    abstract public function getColumns(string $prefix = '');
+    abstract public function getColumns(string $prefix = ''): Collection;
 
     /**
      * @return string
      */
-    abstract public function getTableName();
+    abstract public function getTableName(): string;
 }
