@@ -104,7 +104,7 @@ abstract class Table
      */
     protected function castTo(string $target, array $data): array
     {
-        $columns = $this->driver->getColumns();
+        $columns = $this->columns;
 
         foreach ($data as $k => $v) {
             $column = $columns[$k] ?? null;
