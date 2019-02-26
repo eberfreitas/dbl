@@ -19,7 +19,7 @@ abstract class Table
     /**
      * @var string
      */
-    protected $table;
+    protected $table = '';
 
     /**
      * @var string
@@ -90,6 +90,7 @@ abstract class Table
         $class = sprintf('\\Dbl\\Drivers\\%sDriver', ucfirst($driver));
 
         if (class_exists($class)) {
+            /** @var Driver */
             return new $class($this);
         }
 

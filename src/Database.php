@@ -32,8 +32,8 @@ class Database
     }
 
     /**
-     * @var string|null $key
-     * @var mixed $default
+     * @param string|null $key
+     * @param mixed|null $default
      *
      * @return mixed
      */

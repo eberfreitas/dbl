@@ -42,6 +42,7 @@ abstract class Record extends Collection
             throw new Exception(sprintf('The table class "%s" doesn\'t exist.', $table));
         }
 
+        /** @var Table */
         $this->table = new $table();
         $this->db = Database::getInstance();
         $this->raw = $data;
@@ -94,6 +95,7 @@ abstract class Record extends Collection
         $class = '\\' . trim(__NAMESPACE__, '\\') . '\\' . $this->camelize($table);
 
         if (class_exists($class)) {
+            /** @var Collection */
             $data = new $class($data);
         } else {
             $data = new Collection($data);
