@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3380901e659dc64a122fe32620859ec0",
+    "content-hash": "7d991f04759092f9a015c3857c566bf1",
     "packages": [],
     "packages-dev": [
         {
@@ -330,16 +330,16 @@
         },
         {
             "name": "jimbojsb/pseudo",
-            "version": "0.3.1",
+            "version": "0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jimbojsb/pseudo.git",
-                "reference": "f6de3bdecc372b137715b3cfa8268d89ffbad747"
+                "reference": "6db566b452dd757eabd2160c2205c4150ccc09cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jimbojsb/pseudo/zipball/f6de3bdecc372b137715b3cfa8268d89ffbad747",
-                "reference": "f6de3bdecc372b137715b3cfa8268d89ffbad747",
+                "url": "https://api.github.com/repos/jimbojsb/pseudo/zipball/6db566b452dd757eabd2160c2205c4150ccc09cf",
+                "reference": "6db566b452dd757eabd2160c2205c4150ccc09cf",
                 "shasum": ""
             },
             "require-dev": {
@@ -365,7 +365,7 @@
                 }
             ],
             "description": "PDO/MySQL Connection Mocking",
-            "time": "2018-07-13T13:55:10+00:00"
+            "time": "2019-02-26T02:59:42+00:00"
         },
         {
             "name": "muglug/package-versions-56",

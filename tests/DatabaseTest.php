@@ -114,8 +114,9 @@ class DatabaseTest extends TestCase
         $result->setAffectedRowCount(1);
         $pdo->mock($query, $result);
 
-        //$summary = $this->db->execute($query);
+        $summary = $this->db->execute($query);
 
-        $this->markTestSkipped();
+        $this->assertEquals(1, $summary->lastInsertId);
+        $this->assertEquals(1, $summary->rowCount);
     }
 }
