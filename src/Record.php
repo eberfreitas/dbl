@@ -44,7 +44,6 @@ abstract class Record extends Collection
 
         $this->table = new $table();
         $this->db = Database::getInstance();
-        $this->table = new $table();
         $this->raw = $data;
 
         $relatedDataSeparator = $this->db->getSettings('related_data_separator', '___');
