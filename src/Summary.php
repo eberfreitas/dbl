@@ -4,12 +4,6 @@ namespace Dbl;
 
 use Dbl\Traits\ObjectMagicGetTrait;
 
-/**
- * @property-read int $rowCount
- * @property-read string $errorCode
- * @property-read array $errorInfo
- * @property-read string $lastInsertId
- */
 class Summary
 {
     use ObjectMagicGetTrait;
