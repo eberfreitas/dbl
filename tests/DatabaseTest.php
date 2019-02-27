@@ -2,21 +2,24 @@
 
 namespace Dbl\Tests;
 
-use Dbl\Database;
+use Dbl\{Database, Exception};
+use Dbl\Tests\Support\TestCache;
 use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
 
 class DatabaseTest extends TestCase
 {
+    protected $pdo;
+
     protected $db;
 
     protected function setUp(): void
     {
-        $pdo = new Pdo;
+        $this->pdo = new Pdo;
 
         $settings = [
-            'connections' => ['default' => $pdo],
-            'fetch_mode' => \PDO::FETCH_BOTH,
+            'connections' => ['default' => $this->pdo],
+            'fetch_mode' => \PDO::FETCH_ASSOC,
             'foo' => 'bar'
         ];
 
@@ -25,7 +28,7 @@ class DatabaseTest extends TestCase
 
     public function testConstructor(): void
     {
-        $this->assertEquals(\PDO::FETCH_BOTH, $this->db->settings['fetch_mode']);
+        $this->assertEquals(\PDO::FETCH_ASSOC, $this->db->settings['fetch_mode']);
         $this->assertEquals('bar', $this->db->settings['foo']);
         $this->assertEquals('___', $this->db->settings['related_data_separator']);
     }
@@ -39,7 +42,7 @@ class DatabaseTest extends TestCase
     {
         $this->assertInstanceOf(\PDO::class, $this->db->getPDO());
 
-        $this->expectException(\Dbl\Exception::class);
+        $this->expectException(Exception::class);
 
         $this->db->getPDO('inexistent');
     }
@@ -117,5 +120,43 @@ class DatabaseTest extends TestCase
 
         $this->assertEquals(1, $summary->lastInsertId);
         $this->assertEquals(1, $summary->rowCount);
+    }
+
+    public function testCache(): void
+    {
+        $value = $this->db->cache('test', function () {
+            return 'Test!';
+        });
+
+        $this->assertEquals('Test!', $value);
+
+        $this->db = new Database([
+            'connections' => ['default' => $this->pdo],
+            'cache' => new TestCache,
+        ]);
+
+        $value = $this->db->cache('test', function () {
+            return 'Test!';
+        });
+
+        $this->assertEquals('Test! #DBL', $value);
+
+        $tmpCache = new class {
+            public function remember($key, $ttl, $callback)
+            {
+                return $callback();
+            }
+        };
+
+        $this->db = new Database([
+            'connections' => ['default' => $this->pdo],
+            'cache' => $tmpCache,
+        ]);
+
+        $this->expectException(Exception::class);
+
+        $this->db->cache('test', function () {
+            return 'Test!';
+        });
     }
 }
