@@ -65,8 +65,8 @@ abstract class Table
         $this->driver = $this->driverFactory($this->getDriverName());
         $this->columns = $this->driver->getColumns();
 
-        if (!empty($this->db->getSettings('types_map'))) {
-            $this->typesMap = array_merge($this->typesMap, $this->db->getSettings('types_map'));
+        if (!empty($this->db->settings['types_map'])) {
+            $this->typesMap = array_merge($this->typesMap, $this->db->settings['types_map']);
         }
     }
 
@@ -156,9 +156,7 @@ abstract class Table
     {
         $columns = array_keys($this->columns->raw());
         $save = [];
-        $now = (new \DateTime)->format(
-            $this->db->getSettings('date_time_format', 'Y-m-d H:i:s')
-        );
+        $now = (new \DateTime)->format('Y-m-d H:i:s');
 
         $data->created = $now;
         $data->modified = $now;
@@ -196,9 +194,7 @@ abstract class Table
     {
         $columns = array_keys($this->columns->raw());
         $save = [];
-        $data->modified = (new \DateTime)->format(
-            $this->db->getSettings('date_time_format', 'Y-m-d H:i:s')
-        );
+        $data->modified = (new \DateTime)->format('Y-m-d H:i:s');
 
         unset($data['created']);
 

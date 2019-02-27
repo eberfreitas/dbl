@@ -47,7 +47,7 @@ abstract class Record extends Collection
         $this->db = Database::getInstance();
         $this->raw = $data;
 
-        $relatedDataSeparator = $this->db->getSettings('related_data_separator', '___');
+        $relatedDataSeparator = $this->db->settings['related_data_separator'];
         $relatedData = [];
 
         foreach ($data as $k => $v) {

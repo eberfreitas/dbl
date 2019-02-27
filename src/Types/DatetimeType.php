@@ -23,11 +23,8 @@ class DatetimeType implements Type
      */
     public static function database($value): string
     {
-        $format = Database::getInstance()
-            ->getSettings('date_time_format', 'Y-m-d H:i:s');
-
         if ($value instanceof \DateTime) {
-            return $value->format($format);
+            return $value->format('Y-m-d H:i:s');
         }
 
         return (string) $value;

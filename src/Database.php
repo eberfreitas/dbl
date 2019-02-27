@@ -2,14 +2,14 @@
 
 namespace Dbl;
 
-use Dbl\Collection;
-use Dbl\Exception;
-use Dbl\Summary;
+use Dbl\{Cache, Collection, Exception, Summary};
 use Dbl\Traits\ObjectMagicGetTrait;
 use Generator;
 
 class Database
 {
+    use ObjectMagicGetTrait;
+
     /**
      * @var Database
      */
@@ -18,7 +18,19 @@ class Database
     /**
      * @var array
      */
-    protected $settings;
+    protected $cache = [];
+
+    /**
+     * @var array
+     */
+    protected $settings = [
+        'connections' => null,
+        'cache' => null,
+        'cache_ttl' => 2630000,
+        'fetch_mode' => \PDO::FETCH_ASSOC,
+        'related_data_separator' => '___',
+        'types_map' => []
+    ];
 
     /**
      * @param array $settings
@@ -27,23 +39,8 @@ class Database
      */
     public function __construct(array $settings)
     {
-        $this->settings = $settings;
+        $this->settings = $settings + $this->settings;
         static::$instance = $this;
-    }
-
-    /**
-     * @param string|null $key
-     * @param mixed|null $default
-     *
-     * @return mixed
-     */
-    public function getSettings(?string $key = null, $default = null)
-    {
-        if (is_null($key)) {
-            return $this->settings;
-        }
-
-        return $this->settings[$key] ?? $default;
     }
 
     /**
@@ -89,7 +86,7 @@ class Database
      */
     public function fetch(string $query, array $params = [], string $connection = 'default'): Generator
     {
-        $fetchMode = $this->getSettings('fetch_mode', \PDO::FETCH_ASSOC);
+        $fetchMode = $this->settings['fetch_mode'];
         $pdo = $this->getPDO($connection);
         $statement = $pdo->prepare($query);
 
@@ -119,7 +116,7 @@ class Database
      */
     public function fetchAll(string $query, array $params = [], string $connection = 'default'): Collection
     {
-        $fetchMode = $this->getSettings('fetch_mode', \PDO::FETCH_ASSOC);
+        $fetchMode = $this->settings['fetch_mode'];
         $pdo = $this->getPDO($connection);
         $statement = $pdo->prepare($query);
 
@@ -194,5 +191,30 @@ class Database
         $statement->execute($params);
 
         return new Summary($pdo, $statement);
+    }
+
+    /**
+     * @param string $key
+     * @param int $ttl
+     * @param callable $callback
+     *
+     * @return mixed
+     */
+    public function cache(string $key, callable $callback)
+    {
+        if (is_null($this->settings['cache'])) {
+            $value = $this->cache[$key] ?? $callback();
+            $this->cache[$key] = $value;
+
+            return $value;
+        }
+
+        $cache = $this->settings['cache'];
+
+        if (!is_subclass_of($cache, Cache::class)) {
+            throw new Exception('Cache class must implement the Cache interface.');
+        }
+
+        return $cache->remember($key, $this->settings['cache_ttl'], $callback);
     }
 }

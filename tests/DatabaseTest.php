@@ -16,19 +16,18 @@ class DatabaseTest extends TestCase
 
         $settings = [
             'connections' => ['default' => $pdo],
-            'fetch_mode' => \PDO::FETCH_ASSOC,
+            'fetch_mode' => \PDO::FETCH_BOTH,
             'foo' => 'bar'
         ];
 
         $this->db = new Database($settings);
     }
 
-    public function testGetSettings(): void
+    public function testConstructor(): void
     {
-        $this->assertEquals(\PDO::FETCH_ASSOC, $this->db->getSettings('fetch_mode'));
-        $this->assertEquals('bar', $this->db->getSettings('foo'));
-        $this->assertEquals('Hello World!', $this->db->getSettings('inexistent', 'Hello World!'));
-        $this->assertCount(3, $this->db->getSettings());
+        $this->assertEquals(\PDO::FETCH_BOTH, $this->db->settings['fetch_mode']);
+        $this->assertEquals('bar', $this->db->settings['foo']);
+        $this->assertEquals('___', $this->db->settings['related_data_separator']);
     }
 
     public function testGetInstance(): void
