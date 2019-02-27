@@ -6,8 +6,12 @@ use Dbl\Cache;
 
 class TestCache implements Cache
 {
+    public $cache = [];
+
     public function remember(string $key, int $ttl, callable $callback)
     {
-        return (string) $callback() . ' #DBL';
+        $value = $this->cache[$key] ?? $callback() . ' #DBL';
+
+        return $value;
     }
 }
