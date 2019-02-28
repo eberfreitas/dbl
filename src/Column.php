@@ -25,10 +25,16 @@ class Column
     public $length;
 
     /**
+     * @var mixed|null
+     */
+    public $extra;
+
+    /**
      * @param string $name
      * @param string $type
      * @param bool $null
      * @param int|null $length
+     * @param mixed|null $extra
      *
      * @return void
      */
@@ -36,11 +42,13 @@ class Column
         string $name,
         string $type,
         bool $null,
-        ?int $length
+        ?int $length,
+        $extra = null
     ) {
         $this->name = $name;
         $this->type = $type;
         $this->null = $null;
         $this->length = $length;
+        $this->extra = $extra;
     }
 }
