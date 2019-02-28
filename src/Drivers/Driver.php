@@ -30,11 +30,9 @@ abstract class Driver
     }
 
     /**
-     * @param string $prefix
-     *
      * @return Collection
      */
-    abstract public function getColumns(string $prefix = ''): Collection;
+    abstract public function getColumns(): Collection;
 
     /**
      * @return string

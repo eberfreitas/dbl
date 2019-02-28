@@ -11,41 +11,66 @@ class PgsqlDriver extends Driver
      * @var array
      */
     protected $typesMap = [
-        'character varying' => 'varchar',
-        'character' => 'char',
-        'timestamp without time zone' => 'datetime',
+        'smallint' => 'integer',
+        'integer' => 'integer',
+        'bigint' => 'integer',
+        'decimal' => 'float',
+        'numeric' => 'float',
+        'real' => 'float',
+        'double precision' => 'float',
+        'smallserial' => 'integer',
+        'serial' => 'integer',
+        'bigserial' => 'integer',
     ];
 
     /**
-     * @param string $prefix
-     *
      * @return Collection
      */
-    public function getColumns(string $prefix = ''): Collection
+    public function getColumns(): Collection
     {
-        $query = <<<'SQL'
-            SELECT
-                *
-            FROM
-                information_schema.columns
-            WHERE TRUE
-                AND table_schema = :schema
-                AND table_name = :table
+        $cachableTableName = str_replace([' ', '-', '.'], '_', $this->getTableName());
+        $cacheKey = sprintf('__dbl_pgsql_columns_%s', $cachableTableName);
+
+        $columnsInfo = $this->db->cache(
+            $cacheKey,
+            $this->db->settings['cache_ttl'],
+            function (): array {
+                $query = <<<'SQL'
+                    SELECT
+                        *
+                    FROM
+                        information_schema.columns
+                    WHERE TRUE
+                        AND table_schema = :schema
+                        AND table_name = :table
 SQL;
 
-        $columns = $this->db->fetchAll($query, [
-            ':schema' => $this->table->schema,
-            ':table' => $this->table->table
-        ]);
+                $columns = $this->db->fetchAll($query, [
+                    ':schema' => $this->table->schema,
+                    ':table' => $this->table->table
+                ])->raw();
 
-        return $columns->map(function(int $k, object $v) use ($prefix): array {
-            return [$prefix . $v->column_name, new Column(
-                $prefix . $v->column_name,
-                $this->typesMap[$v->data_type] ?? $v->data_type,
-                $v->is_nullable === 'YES' ? true : false,
-                $v->character_maximum_length
-            )];
-        });
+                foreach ($columns as $k => $v) {
+                    $columns[$k] = $v->raw();
+                }
+
+                return $columns;
+            }
+        );
+
+        $columns = new Collection();
+
+        foreach ($columnsInfo as $info) {
+            $columns[] = new Column(
+                $info['udt_name'],
+                $this->typesMap[$info['data_type']] ?? $info['data_type'],
+                $info['is_nullable'] === 'YES' ? true: false,
+                $info['character_maximum_length'],
+                $info
+            );
+        }
+
+        return $columns;
     }
 
     /**
