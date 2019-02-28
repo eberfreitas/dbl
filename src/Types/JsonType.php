@@ -2,14 +2,17 @@
 
 namespace Dbl\Types;
 
+use Dbl\Column;
+
 class JsonType implements Type
 {
     /**
      * @param mixed $value
+     * @param Column $column
      *
      * @return array
      */
-    public static function code($value): array
+    public static function code($value, Column $column): array
     {
         if (!is_array($value) && is_string($value)) {
             $value = json_decode($value, true);
@@ -20,10 +23,11 @@ class JsonType implements Type
 
     /**
      * @param mixed $value
+     * @param Column $column
      *
      * @return string
      */
-    public static function database($value): string
+    public static function database($value, Column $column): string
     {
         if (!is_string($value)) {
             $value = json_encode($value);
