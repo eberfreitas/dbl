@@ -195,12 +195,12 @@ class Database
 
     /**
      * @param string $key
-     * @param int $ttl
+     * @param int $ttl Time to live in seconds
      * @param callable $callback
      *
      * @return mixed
      */
-    public function cache(string $key, callable $callback)
+    public function cache(string $key, int $ttl, callable $callback)
     {
         if (is_null($this->settings['cache'])) {
             $value = $this->cache[$key] ?? $callback();
@@ -215,6 +215,6 @@ class Database
             throw new Exception('Cache class must implement the Cache interface.');
         }
 
-        return $cache->remember($key, $this->settings['cache_ttl'], $callback);
+        return $cache->remember($key, $ttl, $callback);
     }
 }
