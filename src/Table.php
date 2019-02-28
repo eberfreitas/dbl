@@ -5,7 +5,7 @@ namespace Dbl;
 use Dbl\Drivers\Driver;
 use Dbl\Exception;
 use Dbl\Traits\ObjectMagicGetTrait;
-use Dbl\Types\{BooleanType, DatetimeType, IntegerType, JsonType};
+use Dbl\Types\{BooleanType, DatetimeType, FloatType, IntegerType, JsonType};
 
 abstract class Table
 {
@@ -51,6 +51,7 @@ abstract class Table
      */
     protected $typesMap = [
         'integer' => IntegerType::class,
+        'float' => FloatType::class,
         'json' => JsonType::class,
         'boolean' => BooleanType::class,
         'datetime' => DatetimeType::class,
@@ -121,7 +122,7 @@ abstract class Table
                 continue;
             }
 
-            $data[$k] = call_user_func([$typeClass, $target], $v);
+            $data[$k] = call_user_func([$typeClass, $target], $v, $column);
         }
 
         return $data;

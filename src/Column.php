@@ -25,16 +25,16 @@ class Column
     public $length;
 
     /**
-     * @var mixed|null
+     * @var array
      */
-    public $extra;
+    public $raw;
 
     /**
      * @param string $name
      * @param string $type
      * @param bool $null
      * @param int|null $length
-     * @param mixed|null $extra
+     * @param array $raw
      *
      * @return void
      */
@@ -43,12 +43,12 @@ class Column
         string $type,
         bool $null,
         ?int $length,
-        $extra = null
+        array $raw
     ) {
         $this->name = $name;
         $this->type = $type;
         $this->null = $null;
         $this->length = $length;
-        $this->extra = $extra;
+        $this->raw = $raw;
     }
 }
