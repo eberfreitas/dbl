@@ -22,5 +22,6 @@ class ColumnTest extends TestCase
         $this->assertEquals('string', $column->type);
         $this->assertEquals(false, $column->null);
         $this->assertEquals(255, $column->length);
+        $this->assertEquals(['test' => 123], $column->raw);
     }
 }

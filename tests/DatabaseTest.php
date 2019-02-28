@@ -124,7 +124,7 @@ class DatabaseTest extends TestCase
 
     public function testCache(): void
     {
-        $value = $this->db->cache('test', function () {
+        $value = $this->db->cache('test', 60, function () {
             return 'Test!';
         });
 
@@ -135,7 +135,7 @@ class DatabaseTest extends TestCase
             'cache' => new TestCache,
         ]);
 
-        $value = $this->db->cache('test', function () {
+        $value = $this->db->cache('test', 60, function () {
             return 'Test!';
         });
 
@@ -155,7 +155,7 @@ class DatabaseTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        $this->db->cache('test', function () {
+        $this->db->cache('test', 60, function () {
             return 'Test!';
         });
     }
