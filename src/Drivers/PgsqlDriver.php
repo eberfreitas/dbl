@@ -61,9 +61,13 @@ SQL;
         $columns = new Collection();
 
         foreach ($columnsInfo as $info) {
+            $dataType = $info['data_type'] === 'USER-DEFINED'
+                ? $info['udt_name']
+                : $info['data_type'];
+
             $columns[] = new Column(
-                $info['udt_name'],
-                $this->typesMap[$info['data_type']] ?? $info['data_type'],
+                $info['column_name'],
+                $this->typesMap[$dataType] ?? $dataType,
                 $info['is_nullable'] === 'YES' ? true: false,
                 $info['character_maximum_length'],
                 $info
