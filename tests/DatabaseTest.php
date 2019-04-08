@@ -32,7 +32,7 @@ class DatabaseTest extends TestCase
     {
         $this->assertEquals(NativePDO::FETCH_ASSOC, $this->db->settings['fetch_mode']);
         $this->assertEquals('bar', $this->db->settings['foo']);
-        $this->assertEquals('___', $this->db->settings['related_data_separator']);
+        $this->assertEquals('__', $this->db->settings['related_data_separator']);
     }
 
     public function testGetInstance(): void

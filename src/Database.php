@@ -32,7 +32,7 @@ class Database
         'cache' => null,
         'cache_ttl' => 2630000,
         'fetch_mode' => PDO::FETCH_ASSOC,
-        'related_data_separator' => '___',
+        'related_data_separator' => '__',
         'types_map' => []
     ];
 
