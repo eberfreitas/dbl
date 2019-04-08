@@ -7,6 +7,7 @@ use Dbl\Column;
 use Dbl\Casts\BooleanCast;
 use Dbl\Casts\FloatCast;
 use Dbl\Casts\IntegerCast;
+use Dbl\Casts\JsonCast;
 
 class PgsqlDriver extends Driver
 {
@@ -14,17 +15,19 @@ class PgsqlDriver extends Driver
      * @var array
      */
     protected $castingMap = [
-        'boolean' => BooleanCast::class,
-        'smallint' => IntegerCast::class,
-        'integer' => IntegerCast::class,
         'bigint' => IntegerCast::class,
+        'bigserial' => IntegerCast::class,
+        'boolean' => BooleanCast::class,
         'decimal' => FloatCast::class,
+        'double precision' => FloatCast::class,
+        'integer' => IntegerCast::class,
+        'json' => JsonCast::class,
+        'jsonb' => JsonCast::class,
         'numeric' => FloatCast::class,
         'real' => FloatCast::class,
-        'double precision' => FloatCast::class,
-        'smallserial' => IntegerCast::class,
         'serial' => IntegerCast::class,
-        'bigserial' => IntegerCast::class,
+        'smallint' => IntegerCast::class,
+        'smallserial' => IntegerCast::class,
     ];
 
     /**
