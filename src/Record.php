@@ -54,7 +54,7 @@ abstract class Record extends Collection
             if (strpos($k, $relatedDataSeparator) !== false) {
                 list($table, $key) = explode($relatedDataSeparator, $k);
 
-                if (!empty($relatedData[$table])) {
+                if (!isset($relatedData[$table])) {
                     $relatedData[$table] = [];
                 }
 
@@ -75,13 +75,6 @@ abstract class Record extends Collection
         }
 
         parent::__construct($data);
-    }
-
-    /**
-     * @return Database
-     */
-    public function getDatabase(): Database {
-        return Database::getInstance();
     }
 
     /**
@@ -141,7 +134,7 @@ abstract class Record extends Collection
      */
     protected function set(string $key, $value)
     {
-        $method = '_set' . $this->camelize($key);
+        $method = 'set' . $this->camelize($key);
 
         if (method_exists($this, $method)) {
             $value = call_user_func([$this, $method], $value);
@@ -176,6 +169,28 @@ abstract class Record extends Collection
 
             $this->makeDirty($offset);
         }
+    }
+
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed
+     */
+    public function __get($offset)
+    {
+        $value = isset($this->data[$offset]) ? $this->data[$offset] : null;
+
+        if (is_null($value)) {
+            return null;
+        }
+
+        $method = 'get' . $this->camelize($offset);
+
+        if (method_exists($this, $method)) {
+            $value = call_user_func([$this, $method], $value);
+        }
+
+        return $value;
     }
 
     /**

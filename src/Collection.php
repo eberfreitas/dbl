@@ -2,12 +2,19 @@
 
 namespace Dbl;
 
+use ArrayAccess;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+use JsonSerializable;
+use Serializable;
+
 class Collection implements
-    \ArrayAccess,
-    \IteratorAggregate,
-    \Countable,
-    \Serializable,
-    \JsonSerializable
+    ArrayAccess,
+    Countable,
+    IteratorAggregate,
+    JsonSerializable,
+    Serializable
 {
     /**
      * @var array
@@ -72,11 +79,11 @@ class Collection implements
     }
 
     /**
-     * @return \ArrayIterator
+     * @return ArrayIterator
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): ArrayIterator
     {
-        return new \ArrayIterator($this->data);
+        return new ArrayIterator($this->data);
     }
 
     /**
@@ -115,6 +122,8 @@ class Collection implements
 
     /**
      * @param mixed $offset
+     *
+     * @return mixed
      */
     public function __get($offset)
     {

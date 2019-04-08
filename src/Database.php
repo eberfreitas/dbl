@@ -2,9 +2,13 @@
 
 namespace Dbl;
 
-use Dbl\{Cache, Collection, Exception, Summary};
+use Dbl\Cache;
+use Dbl\Collection;
+use Dbl\Exception;
+use Dbl\Summary;
 use Dbl\Traits\ObjectMagicGetTrait;
 use Generator;
+use PDO;
 
 class Database
 {
@@ -27,7 +31,7 @@ class Database
         'connections' => null,
         'cache' => null,
         'cache_ttl' => 2630000,
-        'fetch_mode' => \PDO::FETCH_ASSOC,
+        'fetch_mode' => PDO::FETCH_ASSOC,
         'related_data_separator' => '___',
         'types_map' => []
     ];
@@ -62,9 +66,9 @@ class Database
      *
      * @throws Exception
      *
-     * @return \PDO
+     * @return PDO
      */
-    public function getPDO(string $connection = 'default'): \PDO
+    public function getPDO(string $connection = 'default'): PDO
     {
         $pdo = $this->settings['connections'][$connection] ?? null;
 

@@ -2,10 +2,12 @@
 
 namespace Dbl\Tests;
 
-use Dbl\{Database, Exception};
+use Dbl\Database;
+use Dbl\Exception;
 use Dbl\Tests\Support\TestCache;
 use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
+use PDO as NativePDO;
 
 class DatabaseTest extends TestCase
 {
@@ -19,7 +21,7 @@ class DatabaseTest extends TestCase
 
         $settings = [
             'connections' => ['default' => $this->pdo],
-            'fetch_mode' => \PDO::FETCH_ASSOC,
+            'fetch_mode' => NativePDO::FETCH_ASSOC,
             'foo' => 'bar'
         ];
 
@@ -28,7 +30,7 @@ class DatabaseTest extends TestCase
 
     public function testConstructor(): void
     {
-        $this->assertEquals(\PDO::FETCH_ASSOC, $this->db->settings['fetch_mode']);
+        $this->assertEquals(NativePDO::FETCH_ASSOC, $this->db->settings['fetch_mode']);
         $this->assertEquals('bar', $this->db->settings['foo']);
         $this->assertEquals('___', $this->db->settings['related_data_separator']);
     }
@@ -40,7 +42,7 @@ class DatabaseTest extends TestCase
 
     public function testGetPDO(): void
     {
-        $this->assertInstanceOf(\PDO::class, $this->db->getPDO());
+        $this->assertInstanceOf(NativePDO::class, $this->db->getPDO());
 
         $this->expectException(Exception::class);
 

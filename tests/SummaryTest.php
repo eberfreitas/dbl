@@ -4,7 +4,8 @@ namespace Tests\Unit;
 
 use Dbl\Summary;
 use PHPUnit\Framework\TestCase;
-use Pseudo\{Pdo, Result};
+use Pseudo\Pdo;
+use Pseudo\Result;
 
 class SummaryTest extends TestCase
 {

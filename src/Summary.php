@@ -3,6 +3,8 @@
 namespace Dbl;
 
 use Dbl\Traits\ObjectMagicGetTrait;
+use PDO;
+use PDOStatement;
 
 class Summary
 {
@@ -32,7 +34,7 @@ class Summary
      * @param \PDO $pdo
      * @param \PDOStatement $statement
      */
-    public function __construct(\PDO $pdo, \PDOStatement $statement)
+    public function __construct(PDO $pdo, PDOStatement $statement)
     {
         $this->rowCount = $statement->rowCount();
         $this->errorCode = $statement->errorCode();

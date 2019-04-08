@@ -10,7 +10,7 @@ class FloatType implements Type
      * @param mixed $value
      * @param Column $column
      *
-     * @return int
+     * @return float
      */
     public static function code($value, Column $column): float
     {
@@ -27,7 +27,7 @@ class FloatType implements Type
      * @param mixed $value
      * @param Column $column
      *
-     * @return int
+     * @return float
      */
     public static function database($value, Column $column): float
     {
