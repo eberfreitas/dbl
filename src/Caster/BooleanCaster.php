@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Types;
+namespace Dbl\Caster;
 
 use Dbl\Column;
 
-class IntegerType implements Type
+class BooleanCaster implements Caster
 {
     /**
      * @param mixed $value
      * @param Column $column
      *
-     * @return int
+     * @return bool
      */
-    public static function code($value, Column $column): int
+    public static function code($value, Column $column): bool
     {
-        return (int) $value;
+        return (bool) $value;
     }
 
     /**
@@ -25,6 +25,6 @@ class IntegerType implements Type
      */
     public static function database($value, Column $column): int
     {
-        return (int) $value;
+        return (int) boolval($value);
     }
 }

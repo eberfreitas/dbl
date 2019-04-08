@@ -1,20 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Types;
+namespace Dbl\Caster;
 
 use Dbl\Column;
 
-class DatetimeType implements Type
+class JsonCaster implements Caster
 {
     /**
      * @param mixed $value
      * @param Column $column
      *
-     * @return \DateTime
+     * @return array
      */
-    public static function code($value, Column $column): \DateTime
+    public static function code($value, Column $column): array
     {
-        return new \DateTime((string) $value);
+        if (!is_array($value) && is_string($value)) {
+            $value = json_decode($value, true);
+        }
+
+        return (array) $value;
     }
 
     /**
@@ -25,8 +29,8 @@ class DatetimeType implements Type
      */
     public static function database($value, Column $column): string
     {
-        if ($value instanceof \DateTime) {
-            return $value->format('Y-m-d H:i:s');
+        if (!is_string($value)) {
+            $value = json_encode($value);
         }
 
         return (string) $value;

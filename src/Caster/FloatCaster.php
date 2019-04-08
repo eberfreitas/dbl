@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Types;
+namespace Dbl\Caster;
 
 use Dbl\Column;
 
-class FloatType implements Type
+class FloatCaster implements Caster
 {
     /**
      * @param mixed $value
