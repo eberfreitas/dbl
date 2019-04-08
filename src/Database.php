@@ -6,13 +6,13 @@ use Dbl\Cache;
 use Dbl\Collection;
 use Dbl\Exception;
 use Dbl\Summary;
-use Dbl\Traits\ObjectMagicGetTrait;
+use Dbl\Traits\MagicGetTrait;
 use Generator;
 use PDO;
 
 class Database
 {
-    use ObjectMagicGetTrait;
+    use MagicGetTrait;
 
     /**
      * @var Database

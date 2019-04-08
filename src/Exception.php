@@ -2,7 +2,7 @@
 
 namespace Dbl;
 
-use Dbl\Traits\ObjectMagicGetTrait;
+use Dbl\Traits\MagicGetTrait;
 
 /**
  * @property-read string $query
@@ -10,7 +10,7 @@ use Dbl\Traits\ObjectMagicGetTrait;
  */
 class Exception extends \Exception
 {
-    use ObjectMagicGetTrait;
+    use MagicGetTrait;
 
     /**
      * @var string

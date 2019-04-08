@@ -2,7 +2,7 @@
 
 namespace Dbl\Traits;
 
-trait ObjectMagicGetTrait
+trait MagicGetTrait
 {
     /**
      * @param string $param

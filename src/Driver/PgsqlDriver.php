@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Drivers;
+namespace Dbl\Driver;
 
 use Dbl\Collection;
 use Dbl\Column;
@@ -10,7 +10,7 @@ class PgsqlDriver extends Driver
     /**
      * @var array
      */
-    protected $typesMap = [
+    protected $castingMap = [
         'smallint' => 'integer',
         'integer' => 'integer',
         'bigint' => 'integer',
@@ -29,7 +29,7 @@ class PgsqlDriver extends Driver
     public function getColumns(): Collection
     {
         $cachableTableName = str_replace([' ', '-', '.'], '_', $this->getTableName());
-        $cacheKey = sprintf('__dbl_pgsql_columns_%s', $cachableTableName);
+        $cacheKey = sprintf('__dbl_pgsql_%s_columns', $cachableTableName);
 
         $columnsInfo = $this->db->cache(
             $cacheKey,
@@ -67,7 +67,7 @@ SQL;
 
             $columns[] = new Column(
                 $info['column_name'],
-                $this->typesMap[$dataType] ?? $dataType,
+                $dataType,
                 $info['is_nullable'] === 'YES' ? true: false,
                 $info['character_maximum_length'],
                 $info

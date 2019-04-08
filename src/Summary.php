@@ -2,13 +2,13 @@
 
 namespace Dbl;
 
-use Dbl\Traits\ObjectMagicGetTrait;
+use Dbl\Traits\MagicGetTrait;
 use PDO;
 use PDOStatement;
 
 class Summary
 {
-    use ObjectMagicGetTrait;
+    use MagicGetTrait;
 
     /**
      * @var int
