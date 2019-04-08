@@ -2,14 +2,14 @@
 
 namespace Dbl;
 
+use Dbl\Collection;
 use Dbl\Drivers\Driver;
 use Dbl\Exception;
-use Dbl\Traits\ObjectMagicGetTrait;
-use Dbl\Types\{BooleanType, DatetimeType, FloatType, IntegerType, JsonType};
+use Dbl\Traits\MagicGetTrait;
 
 abstract class Table
 {
-    use ObjectMagicGetTrait;
+    use MagicGetTrait;
 
     /**
      * @var string
@@ -32,7 +32,7 @@ abstract class Table
     protected $driver;
 
     /**
-     * @var \Dbl\Collection
+     * @var Collection
      */
     protected $columns;
 
@@ -49,13 +49,7 @@ abstract class Table
     /**
      * @var array
      */
-    protected $typesMap = [
-        'integer' => IntegerType::class,
-        'float' => FloatType::class,
-        'json' => JsonType::class,
-        'boolean' => BooleanType::class,
-        'datetime' => DatetimeType::class,
-    ];
+    protected $cast = [];
 
     /**
      * @return void
@@ -65,10 +59,6 @@ abstract class Table
         $this->db = Database::getInstance();
         $this->driver = $this->driverFactory($this->getDriverName());
         $this->columns = $this->driver->getColumns();
-
-        if (!empty($this->db->settings['types_map'])) {
-            $this->typesMap = array_merge($this->typesMap, $this->db->settings['types_map']);
-        }
     }
 
     /**
@@ -115,14 +105,15 @@ abstract class Table
                 continue;
             }
 
-            $type = $column->type;
-            $typeClass = $this->typesMap[$type] ?? null;
+            $casterClass = $this->cast[$column->name]
+                ?? $this->driver->getCaster($column)
+                ?? null;
 
-            if (is_null($typeClass)) {
+            if (is_null($casterClass)) {
                 continue;
             }
 
-            $data[$k] = call_user_func([$typeClass, $target], $v, $column);
+            $data[$k] = call_user_func([$casterClass, $target], $v, $column);
         }
 
         return $data;
@@ -157,10 +148,6 @@ abstract class Table
     {
         $columns = array_keys($this->columns->raw());
         $save = [];
-        $now = (new \DateTime)->format('Y-m-d H:i:s');
-
-        $data->created = $now;
-        $data->modified = $now;
 
         foreach ($data as $k => $v) {
             if (in_array($k, $columns)) {
@@ -195,9 +182,6 @@ abstract class Table
     {
         $columns = array_keys($this->columns->raw());
         $save = [];
-        $data->modified = (new \DateTime)->format('Y-m-d H:i:s');
-
-        unset($data['created']);
 
         if (!in_array($this->primaryKey, array_keys($data->raw()))) {
             throw new Exception(sprintf('Can\'t update a record without primary key ("%s")', $this->primaryKey));
