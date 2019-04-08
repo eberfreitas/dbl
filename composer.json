@@ -28,6 +28,6 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests"
+        "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php --coverage-html ./coverage --whitelist tests tests"
     }
 }
