@@ -1,9 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Driver;
+namespace Dbl\Drivers;
 
 use Dbl\Collection;
 use Dbl\Column;
+use Dbl\Casts\BooleanCast;
+use Dbl\Casts\FloatCast;
+use Dbl\Casts\IntegerCast;
 
 class PgsqlDriver extends Driver
 {
@@ -11,16 +14,17 @@ class PgsqlDriver extends Driver
      * @var array
      */
     protected $castingMap = [
-        'smallint' => 'integer',
-        'integer' => 'integer',
-        'bigint' => 'integer',
-        'decimal' => 'float',
-        'numeric' => 'float',
-        'real' => 'float',
-        'double precision' => 'float',
-        'smallserial' => 'integer',
-        'serial' => 'integer',
-        'bigserial' => 'integer',
+        'boolean' => BooleanCast::class,
+        'smallint' => IntegerCast::class,
+        'integer' => IntegerCast::class,
+        'bigint' => IntegerCast::class,
+        'decimal' => FloatCast::class,
+        'numeric' => FloatCast::class,
+        'real' => FloatCast::class,
+        'double precision' => FloatCast::class,
+        'smallserial' => IntegerCast::class,
+        'serial' => IntegerCast::class,
+        'bigserial' => IntegerCast::class,
     ];
 
     /**
@@ -61,13 +65,13 @@ SQL;
         $columns = new Collection();
 
         foreach ($columnsInfo as $info) {
-            $dataType = $info['data_type'] === 'USER-DEFINED'
+            $type = $info['data_type'] === 'USER-DEFINED'
                 ? $info['udt_name']
                 : $info['data_type'];
 
             $columns[] = new Column(
                 $info['column_name'],
-                $dataType,
+                $type,
                 $info['is_nullable'] === 'YES' ? true: false,
                 $info['character_maximum_length'],
                 $info
@@ -80,7 +84,8 @@ SQL;
     /**
      * @return string
      */
-    public function getTableName(): string {
+    public function getTableName(): string
+    {
         return sprintf(
             '%s.%s',
             $this->table->schema,

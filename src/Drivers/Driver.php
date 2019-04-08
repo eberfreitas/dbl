@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Driver;
+namespace Dbl\Drivers;
 
 use Dbl\Collection;
+use Dbl\Column;
 use Dbl\Table;
 use Dbl\Database;
 
@@ -38,4 +39,14 @@ abstract class Driver
      * @return string
      */
     abstract public function getTableName(): string;
+
+    /**
+     * @param Column $column
+     *
+     * @return string|null
+     */
+    public function getCaster(Column $column): ?string
+    {
+        return $this->castingMap[$column->type] ?? null;
+    }
 }

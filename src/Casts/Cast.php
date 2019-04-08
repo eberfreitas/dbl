@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Caster;
+namespace Dbl\Casts;
 
 use Dbl\Column;
 
-interface Caster
+interface Cast
 {
     /**
      * @param mixed $value
