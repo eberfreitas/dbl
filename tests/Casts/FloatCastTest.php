@@ -10,7 +10,7 @@ class FloatCastTest extends TestCase
 {
     public function testCode()
     {
-        $fakeColumn = new Column('test', 'varchar', true, null, []);
+        $fakeColumn = new Column('test', 'float', true, null, []);
 
         $float = FloatCast::code(1.234, $fakeColumn);
         $this->assertIsFloat($float);

@@ -10,7 +10,7 @@ class BooleanCastTest extends TestCase
 {
     public function testCode()
     {
-        $fakeColumn = new Column('test', 'varchar', true, null, []);
+        $fakeColumn = new Column('test', 'boolean', true, null, []);
 
         $shouldBeTrue = BooleanCast::code('true', $fakeColumn);
         $this->assertIsBool($shouldBeTrue);
