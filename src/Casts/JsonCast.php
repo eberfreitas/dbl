@@ -14,7 +14,7 @@ class JsonCast implements Cast
      */
     public static function code($value, Column $column): array
     {
-        if (!is_array($value) && is_string($value)) {
+        if (is_string($value)) {
             $value = json_decode($value, true);
         }
 
