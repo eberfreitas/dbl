@@ -14,10 +14,10 @@ class FloatCast implements Cast
      */
     public static function code($value, Column $column): float
     {
-        $precision = (int) $column->raw['numeric_precision'] ?? null;
+        $precision = $column->raw['numeric_precision'] ?? null;
 
         if (!is_null($precision)) {
-            $value = number_format($value, $precision);
+            $value = number_format($value, (int) $precision, '.', '');
         }
 
         return (float) $value;
