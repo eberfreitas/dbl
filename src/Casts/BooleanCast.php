@@ -14,7 +14,7 @@ class BooleanCast implements Cast
      */
     public static function code($value, Column $column): bool
     {
-        return (bool) $value;
+        return (bool) boolval($value);
     }
 
     /**
