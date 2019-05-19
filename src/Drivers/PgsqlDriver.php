@@ -75,7 +75,7 @@ SQL;
             $columns[] = new Column(
                 $info['column_name'],
                 $type,
-                $info['is_nullable'] === 'YES' ? true: false,
+                $info['is_nullable'] === 'YES' ? true : false,
                 $info['character_maximum_length'],
                 $info
             );

@@ -52,7 +52,7 @@ class MysqlDriver extends Driver
             $columns[] = new Column(
                 $info['Field'],
                 $type,
-                $info['Null'] === 'YES' ? true: false,
+                $info['Null'] === 'YES' ? true : false,
                 $length,
                 $info
             );
