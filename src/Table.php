@@ -3,6 +3,7 @@
 namespace Dbl;
 
 use Dbl\Collection;
+use Dbl\Column;
 use Dbl\Drivers\Driver;
 use Dbl\Exception;
 use Dbl\Traits\MagicGetTrait;
@@ -99,7 +100,9 @@ abstract class Table
         $columns = $this->columns;
 
         foreach ($data as $k => $v) {
-            $column = $columns[$k] ?? null;
+            $column = $columns->pluck(function ($col) use ($k) {
+                return $col->name === $k;
+            });
 
             if (is_null($column)) {
                 continue;
@@ -146,16 +149,15 @@ abstract class Table
      */
     public function save(Record $data): Summary
     {
-        $columns = array_keys($this->columns->raw());
-        $save = [];
+        $columns = array_map(function (Column $value): string {
+            return $value->name;
+        }, $this->columns->raw());
 
-        foreach ($data as $k => $v) {
-            if (in_array($k, $columns)) {
-                $save[$k] = $v;
-            }
-        }
+        $data = $data->filter(function ($k, $v) use ($columns): bool {
+            return in_array($k, $columns);
+        });
 
-        $save = $this->castToDatabase($save);
+        $save = $this->castToDatabase($data->raw());
         $template = 'INSERT INTO %s (%s) VALUES (%s)';
         $query = sprintf(
             $template,
