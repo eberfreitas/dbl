@@ -184,6 +184,8 @@ class Collection implements
 
     /**
      * @param callable $callback
+     *
+     * @return mixed
      */
     public function pluck(callable $callback)
     {

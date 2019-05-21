@@ -15,7 +15,7 @@ class Database
     use MagicGetTrait;
 
     /**
-     * @var Database
+     * @var Database|null
      */
     protected static $instance;
 

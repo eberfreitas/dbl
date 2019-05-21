@@ -100,7 +100,7 @@ abstract class Table
         $columns = $this->columns;
 
         foreach ($data as $k => $v) {
-            $column = $columns->pluck(function ($col) use ($k) {
+            $column = $columns->pluck(function ($col) use ($k): bool {
                 return $col->name === $k;
             });
 
