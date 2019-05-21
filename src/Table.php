@@ -149,7 +149,7 @@ abstract class Table
      */
     public function save(Record $data): Summary
     {
-        $columns = $this->columns->map(function ($k, $v) {
+        $columns = $this->columns->map(function ($k, $v): string {
             return $v->name;
         });
 
@@ -249,7 +249,19 @@ abstract class Table
             $this->primaryKey,
             $this->driver->getTableName(),
             join(' AND ', array_map(function (string $column): string {
-                return sprintf('%s = ?', $column);
+                $symbols = ['<>', '!='];
+                $symbol = '=';
+
+                /** @var string $s */
+                foreach ($symbols as $s) {
+                    if (strpos($column, $s) !== false) {
+                        $symbol = $s;
+                        $column = trim(str_replace($s, '', $column));
+                        break;
+                    }
+                }
+
+                return sprintf('%s %s ?', $column, $symbol);
             }, array_keys($conditions)))
         );
 
