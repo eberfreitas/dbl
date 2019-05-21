@@ -156,7 +156,7 @@ class Collection implements
             }
         }
 
-        return new Collection($result);
+        return new static($result);
     }
 
     /**
@@ -179,7 +179,21 @@ class Collection implements
             }
         }
 
-        return new Collection($result);
+        return new static($result);
+    }
+
+    /**
+     * @param callable $callback
+     */
+    public function pluck(callable $callback)
+    {
+        foreach ($this->data as $value) {
+            if ($callback($value)) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     /**
