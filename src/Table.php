@@ -3,7 +3,6 @@
 namespace Dbl;
 
 use Dbl\Collection;
-use Dbl\Column;
 use Dbl\Drivers\Driver;
 use Dbl\Exception;
 use Dbl\Traits\MagicGetTrait;
