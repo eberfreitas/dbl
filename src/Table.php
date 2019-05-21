@@ -149,12 +149,12 @@ abstract class Table
      */
     public function save(Record $data): Summary
     {
-        $columns = array_map(function (Column $value): string {
-            return $value->name;
-        }, $this->columns->raw());
+        $columns = $this->columns->map(function ($k, $v) {
+            return $v->name;
+        });
 
         $data = $data->filter(function ($k, $v) use ($columns): bool {
-            return in_array($k, $columns);
+            return in_array($k, $columns->raw());
         });
 
         $save = $this->castToDatabase($data->raw());
