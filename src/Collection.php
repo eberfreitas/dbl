@@ -198,6 +198,11 @@ class Collection implements
         return null;
     }
 
+    public function isEmpty()
+    {
+        return count($this->data) === 0;
+    }
+
     /**
      * @return array
      */
