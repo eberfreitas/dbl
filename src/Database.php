@@ -147,6 +147,20 @@ class Database
      * @param array $params
      * @param string $connection
      *
+     * @return Collection
+     */
+    public function first(string $query, array $params = [], string $connection = 'default'): Collection
+    {
+        $records = $this->fetchAll($query, $params, $connection);
+
+        return $records[0] ?? new Collection();
+    }
+
+    /**
+     * @param string $query
+     * @param array $params
+     * @param string $connection
+     *
      * @throws Exception
      *
      * @return string
