@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Dbl\Casts\FloatCast;
+use Dbl\Cast\FloatCast;
 use Dbl\Column;
 use PHPUnit\Framework\TestCase;
 

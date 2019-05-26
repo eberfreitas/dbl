@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Dbl\Casts\IntegerCast;
+use Dbl\Cast\IntegerCast;
 use Dbl\Column;
 use PHPUnit\Framework\TestCase;
 

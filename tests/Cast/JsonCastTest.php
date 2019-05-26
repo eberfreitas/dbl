@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Dbl\Casts\JsonCast;
+use Dbl\Cast\JsonCast;
 use Dbl\Column;
 use PHPUnit\Framework\TestCase;
 

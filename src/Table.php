@@ -6,6 +6,8 @@ use Dbl\Collection;
 use Dbl\Driver\Driver;
 use Dbl\Exception;
 use Dbl\Helper\MagicGetTrait;
+use Dbl\Helper\StringHelper as S;
+use Dbl\Record;
 
 abstract class Table
 {
@@ -27,29 +29,29 @@ abstract class Table
     protected $primaryKey = 'id';
 
     /**
-     * @var Driver
-     */
-    protected $driver;
-
-    /**
-     * @var Collection
-     */
-    protected $columns;
-
-    /**
      * @var string
      */
     protected $connection = 'default';
 
     /**
-     * @var Database
-     */
-    protected $db;
-
-    /**
      * @var array
      */
     protected $cast = [];
+
+    /**
+     * @var Driver
+     */
+    private $driver;
+
+    /**
+     * @var Collection
+     */
+    private $columns;
+
+    /**
+     * @var Database
+     */
+    protected $db;
 
     /**
      * @return void
@@ -265,5 +267,36 @@ abstract class Table
         );
 
         return (int) $this->db->single($query, $params, $this->connection);
+    }
+
+    /**
+     * @param string $method
+     * @param array $args
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $args)
+    {
+        if (strpos($method, 'findBy') !== false) {
+            $column = S::snakeCase(str_replace('findBy', '', $method));
+            $query = sprintf(
+                'SELECT * FROM %s WHERE %s = ?',
+                $this->driver->getTableName(),
+                $column
+            );
+
+            return $this->db->fetchAll($query, $args);
+        }
+
+        if (strpos($method, 'findFirstBy') !== false) {
+            $column = S::snakeCase(str_replace('findFirstBy', '', $method));
+            $query = sprintf(
+                'SELECT * FROM %s WHERE %s = ? LIMIT 1',
+                $this->driver->getTableName(),
+                $column
+            );
+
+            return $this->db->first($query, $args);
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Dbl\Casts\BooleanCast;
+use Dbl\Cast\BooleanCast;
 use Dbl\Column;
 use PHPUnit\Framework\TestCase;
 

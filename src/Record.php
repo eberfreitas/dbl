@@ -2,6 +2,8 @@
 
 namespace Dbl;
 
+use Dbl\Helper\StringHelper as S;
+
 abstract class Record extends Collection
 {
     /**
@@ -12,22 +14,22 @@ abstract class Record extends Collection
     /**
      * @var Table
      */
-    protected $table;
+    private $table;
 
     /**
      * @var array
      */
-    protected $raw;
+    private $raw;
 
     /**
      * @var array
      */
-    protected $dirty = [];
+    private $dirty = [];
 
     /**
      * @var Database
      */
-    protected $db;
+    private $db;
 
     /**
      * @param array $data
@@ -85,7 +87,7 @@ abstract class Record extends Collection
      */
     protected function relatedDataFactory(string $table, array $data): Collection
     {
-        $class = '\\' . trim(__NAMESPACE__, '\\') . '\\' . $this->camelize($table);
+        $class = '\\' . trim(__NAMESPACE__, '\\') . '\\' . S::camelCase($table);
 
         if (class_exists($class)) {
             /** @var Collection */
@@ -134,7 +136,7 @@ abstract class Record extends Collection
      */
     protected function set(string $key, $value)
     {
-        $method = 'set' . $this->camelize($key);
+        $method = 'set' . S::camelCase($key);
 
         if (method_exists($this, $method)) {
             $value = call_user_func([$this, $method], $value);
@@ -184,7 +186,7 @@ abstract class Record extends Collection
             return null;
         }
 
-        $method = 'get' . $this->camelize($offset);
+        $method = 'get' . S::camelCase($offset);
 
         if (method_exists($this, $method)) {
             $value = call_user_func([$this, $method], $value);
@@ -211,15 +213,5 @@ abstract class Record extends Collection
         $this->dirty = [];
 
         return $summary;
-    }
-
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    protected function camelize(string $string): string
-    {
-        return str_replace(' ', '', ucwords(str_replace(['.', '_', '-'], ' ', $string)));
     }
 }

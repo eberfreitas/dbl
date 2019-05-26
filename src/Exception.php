@@ -2,7 +2,7 @@
 
 namespace Dbl;
 
-use Dbl\Traits\MagicGetTrait;
+use Dbl\Helper\MagicGetTrait;
 
 /**
  * @property-read string $query
