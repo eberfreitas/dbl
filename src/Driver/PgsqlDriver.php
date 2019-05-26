@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Drivers;
+namespace Dbl\Driver;
 
 use Dbl\Collection;
 use Dbl\Column;
-use Dbl\Casts\BooleanCast;
-use Dbl\Casts\FloatCast;
-use Dbl\Casts\IntegerCast;
-use Dbl\Casts\JsonCast;
+use Dbl\Cast\BooleanCast;
+use Dbl\Cast\FloatCast;
+use Dbl\Cast\IntegerCast;
+use Dbl\Cast\JsonCast;
 
 class PgsqlDriver extends Driver
 {

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Drivers;
+namespace Dbl\Driver;
 
 use Dbl\Collection;
 use Dbl\Column;
-use Dbl\Casts\IntegerCast;
+use Dbl\Cast\IntegerCast;
 
 class MysqlDriver extends Driver
 {

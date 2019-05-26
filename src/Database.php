@@ -6,7 +6,7 @@ use Dbl\Cache;
 use Dbl\Collection;
 use Dbl\Exception;
 use Dbl\Summary;
-use Dbl\Traits\MagicGetTrait;
+use Dbl\Helper\MagicGetTrait;
 use Generator;
 use PDO;
 

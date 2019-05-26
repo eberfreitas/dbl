@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Dbl\Traits;
+namespace Dbl\Helper;
 
 trait MagicGetTrait
 {

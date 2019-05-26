@@ -3,9 +3,9 @@
 namespace Dbl;
 
 use Dbl\Collection;
-use Dbl\Drivers\Driver;
+use Dbl\Driver\Driver;
 use Dbl\Exception;
-use Dbl\Traits\MagicGetTrait;
+use Dbl\Helper\MagicGetTrait;
 
 abstract class Table
 {
@@ -78,7 +78,7 @@ abstract class Table
      */
     protected function driverFactory(string $driver): Driver
     {
-        $class = sprintf('\\Dbl\\Drivers\\%sDriver', ucfirst($driver));
+        $class = sprintf('\\Dbl\\Driver\\%sDriver', ucfirst($driver));
 
         if (class_exists($class)) {
             /** @var Driver */
