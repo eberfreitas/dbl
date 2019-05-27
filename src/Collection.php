@@ -207,6 +207,27 @@ class Collection implements
     }
 
     /**
+     * @param mixed $item
+     * @param bool $strict
+     *
+     * @return bool
+     */
+    public function has($item, bool $strict = true): bool
+    {
+        return in_array($item, $this->data, $strict);
+    }
+
+    /**
+     * @param mixed $key
+     *
+     * @return bool
+     */
+    public function hasKey($key): bool
+    {
+        return array_key_exists($key, $this->data);
+    }
+
+    /**
      * @return array
      */
     public function raw(): array

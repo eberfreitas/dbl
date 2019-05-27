@@ -36,6 +36,14 @@ abstract class Table
     /**
      * @var array
      */
+    protected $timestamps = [
+        'create' => 'created_at',
+        'update' => 'updated_at',
+    ];
+
+    /**
+     * @var array
+     */
     protected $cast = [];
 
     /**
@@ -158,6 +166,14 @@ abstract class Table
             return in_array($k, $columns->raw());
         });
 
+        if ($columns->hasKey($this->timestamps['create'])) {
+            $data[$this->timestamps['create']] = new DateTime();
+        }
+
+        if ($columns->hasKey($this->timestamps['update'])) {
+            unset($data[$this->timestamps['update']]);
+        }
+
         $save = $this->castToDatabase($data->raw());
         $template = 'INSERT INTO %s (%s) VALUES (%s)';
         $query = sprintf(
@@ -198,6 +214,14 @@ abstract class Table
             if (in_array($k, $columns) && $data->isDirty($k)) {
                 $save[$k] = $v;
             }
+        }
+
+        if ($columns->hasKey($this->timestamps['create'])) {
+            unset($data[$this->timestamps['create']]);
+        }
+
+        if ($columns->hasKey($this->timestamps['update'])) {
+            $data[$this->timestamps['update']] = new DateTime();
         }
 
         $save = $this->castToDatabase($save);

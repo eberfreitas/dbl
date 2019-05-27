@@ -4,6 +4,7 @@ namespace Dbl\Driver;
 
 use Dbl\Collection;
 use Dbl\Column;
+use Dbl\Cast\DatetimeCast;
 use Dbl\Cast\IntegerCast;
 
 class MysqlDriver extends Driver
@@ -13,6 +14,7 @@ class MysqlDriver extends Driver
      */
     protected $castingMap = [
         'int' => IntegerCast::class,
+        'timestamp' => DatetimeCast::class,
     ];
 
     /**
