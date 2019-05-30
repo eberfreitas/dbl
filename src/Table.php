@@ -2,6 +2,7 @@
 
 namespace Dbl;
 
+use DateTime;
 use Dbl\Collection;
 use Dbl\Driver\Driver;
 use Dbl\Exception;
