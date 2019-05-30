@@ -167,11 +167,11 @@ abstract class Table
             return in_array($k, $columns->raw());
         });
 
-        if ($columns->hasKey($this->timestamps['create'])) {
+        if ($columns->has($this->timestamps['create'])) {
             $data[$this->timestamps['create']] = new DateTime();
         }
 
-        if ($columns->hasKey($this->timestamps['update'])) {
+        if ($columns->has($this->timestamps['update'])) {
             unset($data[$this->timestamps['update']]);
         }
 
@@ -200,7 +200,10 @@ abstract class Table
      */
     public function update(Record $data): Summary
     {
-        $columns = array_keys($this->columns->raw());
+        $columns = $this->columns->map(function ($k, $v): string {
+            return $v->name;
+        });
+
         $save = [];
 
         if (!in_array($this->primaryKey, array_keys($data->raw()))) {
@@ -212,17 +215,17 @@ abstract class Table
         unset($data[$this->primaryKey]);
 
         foreach ($data as $k => $v) {
-            if (in_array($k, $columns) && $data->isDirty($k)) {
+            if (in_array($k, $columns->raw()) && $data->isDirty($k)) {
                 $save[$k] = $v;
             }
         }
 
-        if ($columns->hasKey($this->timestamps['create'])) {
-            unset($data[$this->timestamps['create']]);
+        if ($columns->has($this->timestamps['create'])) {
+            unset($save[$this->timestamps['create']]);
         }
 
-        if ($columns->hasKey($this->timestamps['update'])) {
-            $data[$this->timestamps['update']] = new DateTime();
+        if ($columns->has($this->timestamps['update'])) {
+            $save[$this->timestamps['update']] = new DateTime();
         }
 
         $save = $this->castToDatabase($save);
