@@ -112,8 +112,8 @@ abstract class Record extends Collection
      */
     protected function makeDirty(string $offset): void
     {
-        $value = $this->data[$offset];
-        $original = $this->raw[$offset];
+        $value = $this->data[$offset] ?? null;
+        $original = $this->raw[$offset] ?? null;
 
         if ($value !== $original && !in_array($offset, $this->dirty)) {
             $this->dirty[] = $offset;
