@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Dbl;
+namespace Dbl\Exception;
 
 use Dbl\Helper\MagicGetTrait;
+use Exception;
 
-/**
- * @property-read string $query
- * @property-read array $params
- */
-class Exception extends \Exception
+class PDOPrepareException extends Exception
 {
     use MagicGetTrait;
 
@@ -25,15 +22,14 @@ class Exception extends \Exception
     protected $params;
 
     /**
-     * @param string $message
      * @param string $query
      * @param array $params
      */
-    public function __construct(string $message = '', string $query = '', array $params = [])
+    public function __construct(string $query = '', array $params = [])
     {
         $this->query = $query;
         $this->params = $params;
 
-        return parent::__construct($message);
+        parent::__construct('Error while preparing statement.');
     }
 }

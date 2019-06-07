@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dbl;
 
+use Dbl\Exception\Exception;
+use Dbl\Exception\PDOPrepareException;
 use Dbl\Helper\MagicGetTrait;
 use Generator;
 use PDO;
@@ -38,9 +40,9 @@ class Database
     /**
      * @param array $settings
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(array $settings)
     {
@@ -64,9 +66,9 @@ class Database
     }
 
     /**
-     * @return Database
-     *
      * @throws Exception
+     *
+     * @return Database
      */
     public static function getInstance(): Database
     {
@@ -101,6 +103,7 @@ class Database
      * @param string $connection
      *
      * @throws Exception
+     * @throws PDOPrepareException
      *
      * @return Generator
      */
@@ -111,11 +114,7 @@ class Database
         $statement = $pdo->prepare($query);
 
         if ($statement === false) {
-            throw new Exception(
-                'Error while preparing statement.',
-                $query,
-                $params
-            );
+            throw new PDOPrepareException($query, $params);
         }
 
         $statement->execute($params);
@@ -131,6 +130,7 @@ class Database
      * @param string $connection
      *
      * @throws Exception
+     * @throws PDOPrepareException
      *
      * @return Collection
      */
@@ -141,11 +141,7 @@ class Database
         $statement = $pdo->prepare($query);
 
         if ($statement === false) {
-            throw new Exception(
-                'Error while preparing statement.',
-                $query,
-                $params
-            );
+            throw new PDOPrepareException($query, $params);
         }
 
         $statement->execute($params);
@@ -164,9 +160,10 @@ class Database
      * @param array $params
      * @param string $connection
      *
-     * @return Collection
-     *
      * @throws Exception
+     * @throws PDOPrepareException
+     *
+     * @return Collection
      */
     public function first(string $query, array $params = [], string $connection = 'default'): Collection
     {
@@ -181,6 +178,7 @@ class Database
      * @param string $connection
      *
      * @throws Exception
+     * @throws PDOPrepareException
      *
      * @return string
      */
@@ -190,11 +188,7 @@ class Database
         $statement = $pdo->prepare($query);
 
         if ($statement === false) {
-            throw new Exception(
-                'Error while preparing statement.',
-                $query,
-                $params
-            );
+            throw new PDOPrepareException($query, $params);
         }
 
         $statement->execute($params);
@@ -208,6 +202,7 @@ class Database
      * @param string $connection
      *
      * @throws Exception
+     * @throws PDOPrepareException
      *
      * @return Summary
      */
@@ -217,11 +212,7 @@ class Database
         $statement = $pdo->prepare($query);
 
         if ($statement === false) {
-            throw new Exception(
-                'Error while preparing statement.',
-                $query,
-                $params
-            );
+            throw new PDOPrepareException($query, $params);
         }
 
         $statement->execute($params);
@@ -234,8 +225,6 @@ class Database
      * @param callable $callback
      *
      * @return mixed
-     *
-     * @throws Exception
      */
     public function cache(string $key, callable $callback)
     {

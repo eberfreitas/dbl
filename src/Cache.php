@@ -23,7 +23,6 @@ class Cache
 
     /**
      * @param string $key
-     * @param int $ttl
      * @param callable $callback
      *
      * @return mixed

@@ -6,7 +6,7 @@ namespace Dbl\Driver;
 
 use Dbl\Collection;
 use Dbl\Column;
-use Dbl\Exception;
+use Dbl\Exception\Exception;
 use Dbl\Table;
 use Dbl\Database;
 
@@ -25,9 +25,9 @@ abstract class Driver
     /**
      * @param Table $table
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(Table $table)
     {

@@ -2,8 +2,9 @@
 
 namespace Dbl\Tests;
 
+use Dbl\Collection;
 use Dbl\Database;
-use Dbl\Exception;
+use Dbl\Exception\Exception;
 use Dbl\Tests\Support\TestCache;
 use PHPUnit\Framework\TestCase;
 use Pseudo\Pdo;
@@ -62,7 +63,7 @@ class DatabaseTest extends TestCase
         $pdo->mock($query, $results);
 
         foreach ($this->db->fetch($query) as $k => $record) {
-            $this->assertInstanceOf(\Dbl\Collection::class, $record);
+            $this->assertInstanceOf(Collection::class, $record);
             $this->assertEquals($results[$k]['id'], $record->id);
             $this->assertEquals($results[$k]['name'], $record->name);
         }
@@ -82,10 +83,10 @@ class DatabaseTest extends TestCase
 
         $results = $this->db->fetchAll($query);
 
-        $this->assertInstanceOf(\Dbl\Collection::class, $results);
+        $this->assertInstanceOf(Collection::class, $results);
 
         foreach ($results as $k => $record) {
-            $this->assertInstanceOf(\Dbl\Collection::class, $record);
+            $this->assertInstanceOf(Collection::class, $record);
             $this->assertEquals($results[$k]['id'], $record->id);
             $this->assertEquals($results[$k]['name'], $record->name);
         }

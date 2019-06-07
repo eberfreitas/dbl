@@ -10,7 +10,7 @@ use Dbl\Cast\BooleanCast;
 use Dbl\Cast\FloatCast;
 use Dbl\Cast\IntegerCast;
 use Dbl\Cast\JsonCast;
-use Dbl\Exception;
+use Dbl\Exception\Exception;
 
 class PgsqlDriver extends Driver
 {
@@ -34,9 +34,9 @@ class PgsqlDriver extends Driver
     ];
 
     /**
-     * @return Collection
-     *
      * @throws Exception
+     *
+     * @return Collection
      */
     public function getColumns(): Collection
     {

@@ -6,8 +6,12 @@ namespace Dbl;
 
 use DateTime;
 use Dbl\Driver\Driver;
+use Dbl\Exception\Exception;
+use Dbl\Exception\MissingDriverException;
+use Dbl\Exception\PDOPrepareException;
 use Dbl\Helper\MagicGetTrait;
 use Dbl\Helper\StringHelper as S;
+use PDO;
 
 abstract class Table
 {
@@ -62,6 +66,9 @@ abstract class Table
     protected $db;
 
     /**
+     * @throws Exception
+     * @throws MissingDriverException
+     *
      * @return void
      */
     public function __construct()
@@ -72,17 +79,19 @@ abstract class Table
     }
 
     /**
+     * @throws Exception
+     *
      * @return string
      */
     protected function getDriverName(): string
     {
-        return $this->db->getPDO()->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        return $this->db->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
     }
 
     /**
      * @param string $driver
      *
-     * @throws Exception
+     * @throws MissingDriverException
      *
      * @return Driver
      */
@@ -95,7 +104,8 @@ abstract class Table
             return new $class($this);
         }
 
-        throw new Exception(sprintf('No driver found for "%s"', $driver));
+
+        throw new MissingDriverException($driver);
     }
 
     /**
@@ -154,6 +164,9 @@ abstract class Table
     /**
      * @param Record $data
      *
+     * @throws Exception
+     * @throws PDOPrepareException
+     *
      * @return Summary
      */
     public function save(Record $data): Summary
@@ -194,6 +207,7 @@ abstract class Table
      * @param Record $data
      *
      * @throws Exception
+     * @throws PDOPrepareException
      *
      * @return Summary
      */
@@ -256,6 +270,7 @@ abstract class Table
      * @param array $conditions
      *
      * @throws Exception
+     * @throws PDOPrepareException
      *
      * @return int
      */
@@ -300,6 +315,9 @@ abstract class Table
      * @param string $method
      * @param array $args
      *
+     * @throws Exception
+     * @throws PDOPrepareException
+     *
      * @return mixed
      */
     public function __call(string $method, array $args)
@@ -325,5 +343,7 @@ abstract class Table
 
             return $this->db->first($query, $args);
         }
+
+        return null;
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dbl;
 
+use Dbl\Exception\Exception;
+use Dbl\Exception\PDOPrepareException;
 use Dbl\Helper\StringHelper as S;
 
 abstract class Record extends Collection
@@ -35,6 +37,8 @@ abstract class Record extends Collection
 
     /**
      * @param array $data
+     *
+     * @throws Exception
      *
      * @return void
      */
@@ -198,6 +202,9 @@ abstract class Record extends Collection
     }
 
     /**
+     * @throws Exception
+     * @throws PDOPrepareException
+     *
      * @return Summary
      */
     public function save(): Summary

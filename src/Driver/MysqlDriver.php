@@ -8,7 +8,7 @@ use Dbl\Collection;
 use Dbl\Column;
 use Dbl\Cast\DatetimeCast;
 use Dbl\Cast\IntegerCast;
-use Dbl\Exception;
+use Dbl\Exception\Exception;
 
 class MysqlDriver extends Driver
 {
@@ -21,9 +21,9 @@ class MysqlDriver extends Driver
     ];
 
     /**
-     * @return Collection
-     *
      * @throws Exception
+     *
+     * @return Collection
      */
     public function getColumns(): Collection
     {

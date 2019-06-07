@@ -3,9 +3,10 @@
     "description": "A simple database layer for your projects",
     "type": "library",
     "require": {
+        "php": "^7.2",
         "ext-json": "*",
-        "ext-pdo": "^7.2",
-        "php": ">=7.2"
+        "ext-pdo": "*",
+        "latitude/latitude": "^3.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",
