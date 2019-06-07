@@ -39,6 +39,8 @@ class Database
      * @param array $settings
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function __construct(array $settings)
     {
@@ -48,13 +50,14 @@ class Database
         /** @var class-string|null $cacheClass */
         $cacheClass = $this->settings['cache'] ?? null;
 
-        if (
-            !is_null($cacheClass)
-            && is_subclass_of($cacheClass, Cache::class)
-        ) {
-            $this->cache = new $cacheClass($this->settings['cache_settings']);
-        } else {
+        if (is_null($cacheClass)) {
             $this->cache = new Cache($this->settings['cache_settings']);
+        } else {
+            if (!is_subclass_of($cacheClass, Cache::class)) {
+                throw new Exception('Given cache class must extend the Dbl\Cache class');
+            }
+
+            $this->cache = new $cacheClass($this->settings['cache_settings']);
         }
 
         static::$instance = $this;
