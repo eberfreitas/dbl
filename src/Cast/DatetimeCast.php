@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dbl\Cast;
 
 use DateTime;
 use Dbl\Column;
+use Exception;
 
 class DatetimeCast implements Cast
 {
@@ -12,6 +15,8 @@ class DatetimeCast implements Cast
      * @param Column $column
      *
      * @return DateTime
+     *
+     * @throws Exception
      */
     public static function code($value, Column $column): ?DateTime
     {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dbl\Driver;
 
@@ -8,6 +10,7 @@ use Dbl\Cast\BooleanCast;
 use Dbl\Cast\FloatCast;
 use Dbl\Cast\IntegerCast;
 use Dbl\Cast\JsonCast;
+use Dbl\Exception;
 
 class PgsqlDriver extends Driver
 {
@@ -32,6 +35,8 @@ class PgsqlDriver extends Driver
 
     /**
      * @return Collection
+     *
+     * @throws Exception
      */
     public function getColumns(): Collection
     {
@@ -40,7 +45,7 @@ class PgsqlDriver extends Driver
 
         $columnsInfo = $this->db->cache(
             $cacheKey,
-            $this->db->settings['cache_ttl'],
+            $this->db->settings['cache_settings']['ttl'],
             function (): array {
                 $query = <<<'SQL'
                     SELECT

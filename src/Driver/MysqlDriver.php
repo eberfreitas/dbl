@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dbl\Driver;
 
@@ -6,6 +8,7 @@ use Dbl\Collection;
 use Dbl\Column;
 use Dbl\Cast\DatetimeCast;
 use Dbl\Cast\IntegerCast;
+use Dbl\Exception;
 
 class MysqlDriver extends Driver
 {
@@ -19,6 +22,8 @@ class MysqlDriver extends Driver
 
     /**
      * @return Collection
+     *
+     * @throws Exception
      */
     public function getColumns(): Collection
     {
@@ -27,7 +32,7 @@ class MysqlDriver extends Driver
 
         $columnsInfo = $this->db->cache(
             $cacheKey,
-            $this->db->settings['cache_ttl'],
+            $this->db->settings['cache_settings']['ttl'],
             function (): array {
                 $query = 'SHOW COLUMNS FROM ' . $this->getTableName();
                 $columns = $this->db->fetchAll($query)->raw();

@@ -1,14 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dbl;
 
 use DateTime;
-use Dbl\Collection;
 use Dbl\Driver\Driver;
-use Dbl\Exception;
 use Dbl\Helper\MagicGetTrait;
 use Dbl\Helper\StringHelper as S;
-use Dbl\Record;
 
 abstract class Table
 {

@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dbl\Driver;
 
 use Dbl\Collection;
 use Dbl\Column;
+use Dbl\Exception;
 use Dbl\Table;
 use Dbl\Database;
 
@@ -23,6 +26,8 @@ abstract class Driver
      * @param Table $table
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function __construct(Table $table)
     {

@@ -1,9 +1,21 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dbl;
 
-interface Cache
+abstract class Cache
 {
+    /**
+     * @var array
+     */
+    private $settings;
+
+    public function __construct(array $settings = [])
+    {
+        $this->settings = $settings;
+    }
+
     /**
      * @param string $key
      * @param int $ttl
@@ -11,5 +23,5 @@ interface Cache
      *
      * @return mixed
      */
-    public function remember(string $key, int $ttl, callable $callback);
+    abstract public function remember(string $key, int $ttl, callable $callback);
 }

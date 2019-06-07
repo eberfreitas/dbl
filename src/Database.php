@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Dbl;
 
@@ -30,7 +32,9 @@ class Database
     protected $settings = [
         'connections' => null,
         'cache' => null,
-        'cache_ttl' => 2630000,
+        'cache_settings' => [
+            'ttl' => 2630000,
+        ],
         'fetch_mode' => PDO::FETCH_ASSOC,
         'related_data_separator' => '__',
     ];
@@ -226,11 +230,13 @@ class Database
             return $value;
         }
 
-        $cache = $this->settings['cache'];
+        $cacheClass = $this->settings['cache'];
 
-        if (!is_subclass_of($cache, Cache::class)) {
-            throw new Exception('Cache class must implement the Cache interface.');
+        if (!is_subclass_of($cacheClass, Cache::class)) {
+            throw new Exception('Cache class must extend the Cache abstract class.');
         }
+
+        $cache = new $cacheClass($this->settings['cache_settings']);
 
         return $cache->remember($key, $ttl, $callback);
     }
