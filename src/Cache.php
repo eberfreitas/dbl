@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Dbl;
 
-abstract class Cache
+class Cache
 {
     /**
      * @var array
      */
     private $settings;
+
+    /**
+     * @var array
+     */
+    private $cache = [];
 
     public function __construct(array $settings = [])
     {
@@ -23,5 +28,11 @@ abstract class Cache
      *
      * @return mixed
      */
-    abstract public function remember(string $key, int $ttl, callable $callback);
+    public function remember(string $key, callable $callback)
+    {
+        $value = $this->cache[$key] ?? $callback();
+        $this->cache[$key] = $value;
+
+        return $value;
+    }
 }

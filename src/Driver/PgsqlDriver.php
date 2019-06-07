@@ -45,7 +45,6 @@ class PgsqlDriver extends Driver
 
         $columnsInfo = $this->db->cache(
             $cacheKey,
-            $this->db->settings['cache_settings']['ttl'],
             function (): array {
                 $query = <<<'SQL'
                     SELECT

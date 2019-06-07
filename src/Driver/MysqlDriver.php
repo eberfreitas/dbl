@@ -32,7 +32,6 @@ class MysqlDriver extends Driver
 
         $columnsInfo = $this->db->cache(
             $cacheKey,
-            $this->db->settings['cache_settings']['ttl'],
             function (): array {
                 $query = 'SHOW COLUMNS FROM ' . $this->getTableName();
                 $columns = $this->db->fetchAll($query)->raw();

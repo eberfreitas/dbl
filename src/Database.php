@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Dbl;
 
-use Dbl\Cache;
-use Dbl\Collection;
-use Dbl\Exception;
-use Dbl\Summary;
 use Dbl\Helper\MagicGetTrait;
 use Generator;
 use PDO;
@@ -22,9 +18,9 @@ class Database
     protected static $instance;
 
     /**
-     * @var array
+     * @var Cache
      */
-    protected $cache = [];
+    private $cache;
 
     /**
      * @var array
@@ -47,6 +43,20 @@ class Database
     public function __construct(array $settings)
     {
         $this->settings = $settings + $this->settings;
+        $this->settings['cache_settings']['ttl'] = $this->settings['cache_settings']['ttl'] ?? 2630000;
+
+        /** @var class-string|null $cacheClass */
+        $cacheClass = $this->settings['cache'] ?? null;
+
+        if (
+            !is_null($cacheClass)
+            && is_subclass_of($cacheClass, Cache::class)
+        ) {
+            $this->cache = new $cacheClass($this->settings['cache_settings']);
+        } else {
+            $this->cache = new Cache($this->settings['cache_settings']);
+        }
+
         static::$instance = $this;
     }
 
@@ -152,6 +162,8 @@ class Database
      * @param string $connection
      *
      * @return Collection
+     *
+     * @throws Exception
      */
     public function first(string $query, array $params = [], string $connection = 'default'): Collection
     {
@@ -216,28 +228,14 @@ class Database
 
     /**
      * @param string $key
-     * @param int $ttl Time to live in seconds
      * @param callable $callback
      *
      * @return mixed
+     *
+     * @throws Exception
      */
-    public function cache(string $key, int $ttl, callable $callback)
+    public function cache(string $key, callable $callback)
     {
-        if (is_null($this->settings['cache'])) {
-            $value = $this->cache[$key] ?? $callback();
-            $this->cache[$key] = $value;
-
-            return $value;
-        }
-
-        $cacheClass = $this->settings['cache'];
-
-        if (!is_subclass_of($cacheClass, Cache::class)) {
-            throw new Exception('Cache class must extend the Cache abstract class.');
-        }
-
-        $cache = new $cacheClass($this->settings['cache_settings']);
-
-        return $cache->remember($key, $ttl, $callback);
+        return $this->cache->remember($key, $callback);
     }
 }
