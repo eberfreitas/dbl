@@ -162,7 +162,7 @@ abstract class Record extends Collection
             $original = $this->data[$k] ?? null;
 
             if ($v !== $original) {
-                $this->set($k, $v);
+                $this->__set($k, $v);
             }
         }
     }
