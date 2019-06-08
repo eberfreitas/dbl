@@ -152,6 +152,22 @@ abstract class Record extends Collection
     }
 
     /**
+     * @param array $data
+     *
+     * @return void
+     */
+    public function merge(array $data): void
+    {
+        foreach ($data as $k => $v) {
+            $original = $this->data[$k] ?? null;
+
+            if ($v !== $original) {
+                $this->set($k, $v);
+            }
+        }
+    }
+
+    /**
      * @param mixed $offset
      * @param mixed $value
      *
