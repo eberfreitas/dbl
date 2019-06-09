@@ -20,7 +20,11 @@ class DatetimeCast implements Cast
      */
     public static function code($value, Column $column): ?DateTime
     {
-        if ($value) {
+        if ($value instanceof DateTime) {
+            return $value;
+        }
+
+        if (is_string($value)) {
             return new DateTime($value);
         }
 
