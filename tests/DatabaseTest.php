@@ -145,7 +145,7 @@ class DatabaseTest extends TestCase
         $this->assertEquals('Test! #DBL', $value);
 
         $tmpCache = new class {
-            public function remember($key, $ttl, $callback)
+            public function remember($key, $callback)
             {
                 return $callback();
             }

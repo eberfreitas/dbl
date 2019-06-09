@@ -45,7 +45,6 @@ class Database
     public function __construct(array $settings)
     {
         $this->settings = $settings + $this->settings;
-        $this->settings['cache_settings']['ttl'] = $this->settings['cache_settings']['ttl'] ?? 2630000;
 
         /** @var class-string|null $cacheClass */
         $cacheClass = $this->settings['cache'] ?? null;
