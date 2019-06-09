@@ -30,9 +30,7 @@ class Database
     protected $settings = [
         'connections' => null,
         'cache' => null,
-        'cache_settings' => [
-            'ttl' => 2630000,
-        ],
+        'cache_settings' => [],
         'fetch_mode' => PDO::FETCH_ASSOC,
         'related_data_separator' => '__',
     ];
