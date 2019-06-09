@@ -13,6 +13,8 @@ use Dbl\Helper\MagicGetTrait;
 use Dbl\Helper\StringHelper as S;
 use PDO;
 
+use const ARRAY_FILTER_USE_BOTH;
+
 abstract class Table
 {
     use MagicGetTrait;
@@ -23,9 +25,9 @@ abstract class Table
     protected $schema = 'public';
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $table = '';
+    protected $table;
 
     /**
      * @var string
@@ -36,6 +38,9 @@ abstract class Table
      * @var string
      */
     protected $connection = 'default';
+
+    /** @var class-string */
+    protected $recordClass = Collection::class;
 
     /**
      * @var array
@@ -73,9 +78,27 @@ abstract class Table
      */
     public function __construct()
     {
+        if (is_null($this->table)) {
+            throw new Exception('Table name must be defined at `Table::$table` attribute.');
+        }
+
         $this->db = Database::getInstance();
         $this->driver = $this->driverFactory($this->getDriverName());
         $this->columns = $this->driver->getColumns();
+
+        $this->resolveRecordClass();
+    }
+
+    protected function resolveRecordClass(): void
+    {
+        $classTree = explode('\\', get_class($this));
+        $thisClassName = end($classTree);
+        $recordClassName = S::stringReplaceLast('Table', 'Record', $thisClassName);
+        $recordClass = '\\' . trim(__NAMESPACE__, '\\') . '\\Record\\' . $recordClassName;
+
+        if (class_exists($recordClass)) {
+            $this->recordClass = $recordClass;
+        }
     }
 
     /**
@@ -279,7 +302,7 @@ abstract class Table
         $columns = array_keys($this->columns->raw());
         $conditions = array_filter($conditions, function($v, $k) use ($columns): bool {
             return in_array($k, $columns);
-        }, \ARRAY_FILTER_USE_BOTH);
+        }, ARRAY_FILTER_USE_BOTH);
 
         if (empty($conditions)) {
             throw new Exception('The `$conditions` array keys must match existing columns in this table.');
@@ -322,7 +345,7 @@ abstract class Table
      */
     public function __call(string $method, array $args)
     {
-        if (strpos($method, 'findBy') !== false) {
+        if (strpos($method, 'findBy') === 0) {
             $column = S::snakeCase(str_replace('findBy', '', $method));
             $query = sprintf(
                 'SELECT * FROM %s WHERE %s = ?',
@@ -330,10 +353,10 @@ abstract class Table
                 $column
             );
 
-            return $this->db->fetchAll($query, $args);
+            return $this->db->fetchAll($query, $args, $this->recordClass, $this->connection);
         }
 
-        if (strpos($method, 'findFirstBy') !== false) {
+        if (strpos($method, 'findFirstBy') === 0) {
             $column = S::snakeCase(str_replace('findFirstBy', '', $method));
             $query = sprintf(
                 'SELECT * FROM %s WHERE %s = ? LIMIT 1',
@@ -341,7 +364,7 @@ abstract class Table
                 $column
             );
 
-            return $this->db->first($query, $args);
+            return $this->db->first($query, $args, $this->recordClass, $this->connection);
         }
 
         return null;

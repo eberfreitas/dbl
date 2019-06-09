@@ -11,9 +11,9 @@ use Dbl\Helper\StringHelper as S;
 abstract class Record extends Collection
 {
     /**
-     * @var string
+     * @var class-string|null
      */
-    protected $tableClass = '';
+    protected $tableClass;
 
     /**
      * @var Table
@@ -44,14 +44,7 @@ abstract class Record extends Collection
      */
     public function __construct(array $data)
     {
-        $table = $this->tableClass;
-
-        if (!class_exists($table)) {
-            throw new Exception(sprintf('The table class "%s" doesn\'t exist.', $table));
-        }
-
-        /** @var Table */
-        $this->table = new $table();
+        $this->tableClassFactory();
         $this->db = Database::getInstance();
         $this->raw = $data;
 
@@ -83,6 +76,29 @@ abstract class Record extends Collection
         }
 
         parent::__construct($data);
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function tableClassFactory(): void
+    {
+        $tableClass = $this->tableClass;
+
+        if (is_null($tableClass)) {
+            $classTree = explode('\\', get_class($this));
+            $thisClassName = end($classTree);
+            $tableClassName = S::stringReplaceLast('Record', 'Table', $thisClassName);
+            $namespace = join('\\', array_slice($classTree, 0, (count($classTree) - 2)));
+            $tableClass = '\\' . $namespace . '\\' . $tableClassName;
+        }
+
+        if (!class_exists($tableClass)) {
+            throw new Exception(sprintf('The table class "%s" doesn\'t exist.', $tableClass));
+        }
+
+        /** @var Table */
+        $this->table = new $tableClass();
     }
 
     /**

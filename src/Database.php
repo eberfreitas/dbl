@@ -100,6 +100,7 @@ class Database
     /**
      * @param string $query
      * @param array $params
+     * @param class-string $collection
      * @param string $connection
      *
      * @throws Exception
@@ -107,7 +108,12 @@ class Database
      *
      * @return Generator
      */
-    public function fetch(string $query, array $params = [], string $connection = 'default'): Generator
+    public function fetch(
+        string $query,
+        array $params = [],
+        string $collection = Collection::class,
+        string $connection = 'default'
+    ): Generator
     {
         $fetchMode = $this->settings['fetch_mode'];
         $pdo = $this->getPDO($connection);
@@ -120,13 +126,14 @@ class Database
         $statement->execute($params);
 
         while ($result = $statement->fetch($fetchMode)) {
-            yield new Collection($result);
+            yield new $collection($result);
         }
     }
 
     /**
      * @param string $query
      * @param array $params
+     * @param class-string $collection
      * @param string $connection
      *
      * @throws Exception
@@ -134,7 +141,12 @@ class Database
      *
      * @return Collection
      */
-    public function fetchAll(string $query, array $params = [], string $connection = 'default'): Collection
+    public function fetchAll(
+        string $query,
+        array $params = [],
+        string $collection = Collection::class,
+        string $connection = 'default'
+    ): Collection
     {
         $fetchMode = $this->settings['fetch_mode'];
         $pdo = $this->getPDO($connection);
@@ -149,7 +161,7 @@ class Database
         $results = $statement->fetchAll($fetchMode);
 
         foreach ($results as $k => $v) {
-            $results[$k] = new Collection($v);
+            $results[$k] = new $collection($v);
         }
 
         return new Collection($results);
@@ -158,6 +170,7 @@ class Database
     /**
      * @param string $query
      * @param array $params
+     * @param class-string $collection
      * @param string $connection
      *
      * @throws Exception
@@ -165,11 +178,16 @@ class Database
      *
      * @return Collection
      */
-    public function first(string $query, array $params = [], string $connection = 'default'): Collection
+    public function first(
+        string $query,
+        array $params = [],
+        string $collection = Collection::class,
+        string $connection = 'default'
+    ): Collection
     {
-        $records = $this->fetchAll($query, $params, $connection);
+        $records = $this->fetchAll($query, $params, $collection, $connection);
 
-        return $records[0] ?? new Collection();
+        return $records[0] ?? new $collection();
     }
 
     /**
