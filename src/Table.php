@@ -92,9 +92,9 @@ abstract class Table
     protected function resolveRecordClass(): void
     {
         $classTree = explode('\\', get_class($this));
-        $thisClassName = end($classTree);
+        $thisClassName = array_pop($classTree);
         $recordClassName = S::stringReplaceLast('Table', 'Record', $thisClassName);
-        $recordClass = '\\' . trim(__NAMESPACE__, '\\') . '\\Record\\' . $recordClassName;
+        $recordClass = '\\' . join('\\', $classTree) . '\\Record\\' . $recordClassName;
 
         if (class_exists($recordClass)) {
             $this->recordClass = $recordClass;
