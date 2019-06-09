@@ -9,12 +9,12 @@ class Cache
     /**
      * @var array
      */
-    private $settings;
+    protected $settings;
 
     /**
      * @var array
      */
-    private $cache = [];
+    protected $cache = [];
 
     public function __construct(array $settings = [])
     {
