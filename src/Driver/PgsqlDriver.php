@@ -10,6 +10,7 @@ use Dbl\Cast\BooleanCast;
 use Dbl\Cast\FloatCast;
 use Dbl\Cast\IntegerCast;
 use Dbl\Cast\JsonCast;
+use Dbl\Database;
 use Dbl\Exception\Exception;
 
 class PgsqlDriver extends Driver
@@ -43,7 +44,7 @@ class PgsqlDriver extends Driver
         $cachableTableName = str_replace([' ', '-', '.'], '_', $this->getTableName());
         $cacheKey = sprintf('__dbl_pgsql_%s_columns', $cachableTableName);
 
-        $columnsInfo = $this->db->cache(
+        $columnsInfo = Database::getInstance()->cache(
             $cacheKey,
             function (): array {
                 $query = <<<'SQL'
@@ -56,7 +57,7 @@ class PgsqlDriver extends Driver
                         AND table_name = :table
 SQL;
 
-                $columns = $this->db->fetchAll($query, [
+                $columns = Database::getInstance()->fetchAll($query, [
                     ':schema' => $this->table->schema,
                     ':table' => $this->table->table
                 ])->raw();

@@ -31,11 +31,6 @@ abstract class Record extends Collection
     private $dirty = [];
 
     /**
-     * @var Database
-     */
-    private $db;
-
-    /**
      * @param array $data
      *
      * @throws Exception
@@ -45,10 +40,9 @@ abstract class Record extends Collection
     public function __construct(array $data)
     {
         $this->tableClassFactory();
-        $this->db = Database::getInstance();
         $this->raw = $data;
 
-        $relatedDataSeparator = $this->db->settings['related_data_separator'];
+        $relatedDataSeparator = Database::getInstance()->settings['related_data_separator'];
         $relatedData = [];
 
         foreach ($data as $k => $v) {

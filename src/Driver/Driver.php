@@ -18,11 +18,6 @@ abstract class Driver
     protected $table;
 
     /**
-     * @var Database
-     */
-    protected $db;
-
-    /**
      * @param Table $table
      *
      * @throws Exception
@@ -32,7 +27,6 @@ abstract class Driver
     public function __construct(Table $table)
     {
         $this->table = $table;
-        $this->db = Database::getInstance();
     }
 
     /**

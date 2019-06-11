@@ -66,11 +66,6 @@ abstract class Table
     private $columns;
 
     /**
-     * @var Database
-     */
-    protected $db;
-
-    /**
      * @throws Exception
      * @throws MissingDriverException
      *
@@ -81,8 +76,7 @@ abstract class Table
         if (is_null($this->table)) {
             throw new Exception('Table name must be defined at `Table::$table` attribute.');
         }
-
-        $this->db = Database::getInstance();
+        
         $this->driver = $this->driverFactory($this->getDriverName());
         $this->columns = $this->driver->getColumns();
 
@@ -108,7 +102,7 @@ abstract class Table
      */
     protected function getDriverName(): string
     {
-        return $this->db->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
+        return Database::getInstance()->getPDO()->getAttribute(PDO::ATTR_DRIVER_NAME);
     }
 
     /**
@@ -219,7 +213,7 @@ abstract class Table
             join(', ', array_fill(0, count($save), '?'))
         );
 
-        return $this->db->execute(
+        return Database::getInstance()->execute(
             $query,
             array_values($save),
             $this->connection
@@ -282,7 +276,7 @@ abstract class Table
         $params = array_values($save);
         $params[] = $primaryKeyValue;
 
-        return $this->db->execute(
+        return Database::getInstance()->execute(
             $query,
             $params,
             $this->connection
@@ -331,7 +325,7 @@ abstract class Table
             }, array_keys($conditions)))
         );
 
-        return (int) $this->db->single($query, $params, $this->connection);
+        return (int) Database::getInstance()->single($query, $params, $this->connection);
     }
 
     /**
@@ -353,7 +347,7 @@ abstract class Table
                 $column
             );
 
-            return $this->db->fetchAll($query, $args, $this->recordClass, $this->connection);
+            return Database::getInstance()->fetchAll($query, $args, $this->recordClass, $this->connection);
         }
 
         if (strpos($method, 'findFirstBy') === 0) {
@@ -364,7 +358,7 @@ abstract class Table
                 $column
             );
 
-            return $this->db->first($query, $args, $this->recordClass, $this->connection);
+            return Database::getInstance()->first($query, $args, $this->recordClass, $this->connection);
         }
 
         return null;

@@ -8,6 +8,7 @@ use Dbl\Collection;
 use Dbl\Column;
 use Dbl\Cast\DatetimeCast;
 use Dbl\Cast\IntegerCast;
+use Dbl\Database;
 use Dbl\Exception\Exception;
 
 class MysqlDriver extends Driver
@@ -30,11 +31,11 @@ class MysqlDriver extends Driver
         $cachableTableName = str_replace([' ', '-', '.'], '_', $this->getTableName());
         $cacheKey = sprintf('__dbl_mysql_%s_columns', $cachableTableName);
 
-        $columnsInfo = $this->db->cache(
+        $columnsInfo = Database::getInstance()->cache(
             $cacheKey,
             function (): array {
                 $query = 'SHOW COLUMNS FROM ' . $this->getTableName();
-                $columns = $this->db->fetchAll($query)->raw();
+                $columns = Database::getInstance()->fetchAll($query)->raw();
 
                 foreach ($columns as $k => $v) {
                     $columns[$k] = $v->raw();
