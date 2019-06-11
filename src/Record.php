@@ -213,11 +213,6 @@ abstract class Record extends Collection
     public function __get($offset)
     {
         $value = isset($this->data[$offset]) ? $this->data[$offset] : null;
-
-        if (is_null($value)) {
-            return null;
-        }
-
         $method = 'get' . S::camelCase($offset);
 
         if (method_exists($this, $method)) {
