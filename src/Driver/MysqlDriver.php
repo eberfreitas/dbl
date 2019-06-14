@@ -8,6 +8,7 @@ use Dbl\Collection;
 use Dbl\Column;
 use Dbl\Cast\DatetimeCast;
 use Dbl\Cast\IntegerCast;
+use Dbl\Cast\JsonCast;
 use Dbl\Database;
 use Dbl\Exception\Exception;
 
@@ -19,6 +20,7 @@ class MysqlDriver extends Driver
     protected $castingMap = [
         'int' => IntegerCast::class,
         'timestamp' => DatetimeCast::class,
+        'json' => JsonCast::class,
     ];
 
     /**
