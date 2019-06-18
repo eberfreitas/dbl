@@ -184,7 +184,7 @@ class Database
     {
         $records = $this->fetchAll($query, $params, $collection, $connection);
 
-        return $records[0] ?? new $collection();
+        return $records[0] ?? new $collection([]);
     }
 
     /**
