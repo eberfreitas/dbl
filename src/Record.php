@@ -232,10 +232,10 @@ abstract class Record extends Collection
     {
         $pk = $this->table->primaryKey;
 
-        if (array_key_exists($pk, $this->data)) {
-            $summary = $this->table->update($this);
-        } else {
+        if (empty($this->data[$pk])) {
             $summary = $this->table->save($this);
+        } else {
+            $summary = $this->table->update($this);
         }
 
         $this->data[$pk] = $summary->lastInsertId;
