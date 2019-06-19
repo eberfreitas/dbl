@@ -103,7 +103,11 @@ abstract class Record extends Collection
      */
     protected function relatedDataFactory(string $table, array $data): Collection
     {
-        $class = '\\' . trim(__NAMESPACE__, '\\') . '\\' . S::camelCase($table);
+        $classTree = explode('\\', get_class($this));
+
+        array_pop($classTree);
+
+        $class = '\\' . join('\\', $classTree) . '\\' . S::camelCase($table) . 'Record';
 
         if (class_exists($class)) {
             /** @var Collection */
