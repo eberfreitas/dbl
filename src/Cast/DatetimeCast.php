@@ -35,10 +35,14 @@ class DatetimeCast implements Cast
      * @param mixed $value
      * @param Column $column
      *
-     * @return string
+     * @return string|null
      */
-    public static function database($value, Column $column): string
+    public static function database($value, Column $column): ?string
     {
+        if (is_null($value) && $column->null) {
+            return null;
+        }
+
         if ($value instanceof DateTime) {
             return $value->format('Y-m-d H:i:s');
         }
